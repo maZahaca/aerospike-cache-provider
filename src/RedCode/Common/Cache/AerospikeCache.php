@@ -116,7 +116,7 @@ class AerospikeCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        return null;
+        return;
     }
 
     /**

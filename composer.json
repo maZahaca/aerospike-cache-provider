@@ -1,11 +1,19 @@
 {
     "name": "redcode/aerospike-cache-provider",
+    "description": "Adds aerospike provider to use it through the doctrine/cache",
+    "keywords": ["aerospike", "doctrine", "cache", "provider"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Andrew Reddikh",
             "email": "andrew@reddikh.com"
+        },
+        {
+            "name": "RedCode",
+            "homepage": "http://redcode.im"
         }
     ],
+    "minimum-stability": "stable",
     "autoload": {
         "psr-0": { "RedCode\\Common\\Cache": "src/" }
     },
@@ -18,6 +26,7 @@
     },
     "require-dev": {
         "fabpot/php-cs-fixer": "^1.10",
-        "contorion/aerospike-stub": "^1.0"
+        "contorion/aerospike-stub": "^1.0",
+        "phpunit/phpunit": "^4.8"
     }
 }

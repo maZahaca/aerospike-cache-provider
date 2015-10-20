@@ -1,5 +1,5 @@
 {
-    "name": "test/cs_php_test",
+    "name": "redcode/aerospike-cache-provider",
     "authors": [
         {
             "name": "Andrew Reddikh",

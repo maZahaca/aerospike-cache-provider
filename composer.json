@@ -1,0 +1,23 @@
+{
+    "name": "test/cs_php_test",
+    "authors": [
+        {
+            "name": "Andrew Reddikh",
+            "email": "andrew@reddikh.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "RedCode\\Common\\Cache": "src/" }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "require": {
+        "php": "^5.4",
+        "doctrine/cache": "^1.4"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "^1.10",
+        "contorion/aerospike-stub": "^1.0"
+    }
+}

@@ -47,10 +47,12 @@ class AerospikeCache extends CacheProvider
      */
     protected function doFetch($id)
     {
-        $record = null;
+        $record = [];
         $aeroKey = $this->getAerospikeKey($id);
         $status = $this->aerospike->get($aeroKey, $record);
-        $record = isset($record['bins'][self::WRAPPER_NAME]) ? $record['bins'][self::WRAPPER_NAME] : false;
+        $record = isset($record['bins'][self::WRAPPER_NAME]) ?
+            unserialize(base64_decode($record['bins'][self::WRAPPER_NAME])) :
+            false;
 
         switch ($status) {
             case \Aerospike::OK:
@@ -76,7 +78,7 @@ class AerospikeCache extends CacheProvider
     protected function doSave($id, $data, $lifeTime = 0)
     {
         $aeroKey = $this->getAerospikeKey($id);
-        $data = [self::WRAPPER_NAME => $this->prepareValue($data)];
+        $data = [self::WRAPPER_NAME => base64_encode(serialize($data))];
         $ttl = !empty($lifeTime) ? $lifeTime : $this->getTimeLimitFromNamespace($aeroKey);
         $status = $this->aerospike->put(
             $aeroKey,
@@ -136,27 +138,6 @@ class AerospikeCache extends CacheProvider
     }
 
     /**
-     * Prepare data before save.
-     *
-     * @param mixed $data
-     *
-     * @return mixed
-     */
-    private function prepareValue($data)
-    {
-        if (is_array($data)) {
-            foreach ($data as $key => $value) {
-                $data[$key] = $this->prepareValue($value);
-            }
-        }
-        if (is_null($data)) {
-            return false;
-        }
-
-        return $data;
-    }
-
-    /**
      * Get pre-configured ttl from namespace.
      *
      * @param array $aeroKey
@@ -165,8 +146,8 @@ class AerospikeCache extends CacheProvider
      */
     private function getTimeLimitFromNamespace(array $aeroKey)
     {
-        $metadata = null;
-        if ($this->aerospike->exists($aeroKey, $metadata) == \Aerospike::OK) {
+        $metadata = [];
+        if ($this->aerospike->exists($aeroKey, $metadata) === \Aerospike::OK && !empty($metadata['ttl'])) {
             return (int) $metadata['ttl'];
         }
 
